@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "id": "ycr",
+  "version": "${version}",
+  "name": "Yqloss Client Resumed",
+  "description": "Yqloss Client Mixin port for modern versions of Minecraft",
+  "authors": [
+    "Yqloss"
+  ],
+  "contact": {
+    "homepage": "https://ycr.yqlo.ss//",
+    "sources": "https://github.com/Necron-Dev/yqloss-client-resumed"
+  },
+  "license": "CC0-1.0",
+  "icon": "assets/ycr/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      {
+        "value": "net.yqloss.ycr.YqlossClientResumedKt::initialize",
+        "adapter": "kotlin"
+      }
+    ]
+  },
+  "mixins": [
+    "yqloss-client-resumed.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": "*",
+    "minecraft": "*",
+    "java": "*",
+    "fabric-language-kotlin": "*"
+  }
+}
