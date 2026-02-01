@@ -1,8 +1,5 @@
 package net.yqloss.ycr.gui
 
-import java.util.*
-import kotlin.math.min
-import kotlin.uuid.Uuid
 import me.friwi.jcefmaven.CefAppBuilder
 import net.yqloss.ycr.event.BrowserEvent
 import net.yqloss.ycr.event.GuiRenderEvent
@@ -25,6 +22,9 @@ import org.cef.network.CefPostDataElement
 import org.cef.network.CefRequest
 import org.cef.network.CefResponse
 import org.slf4j.LoggerFactory
+import java.util.*
+import kotlin.math.min
+import kotlin.uuid.Uuid
 
 private val logger = LoggerFactory.getLogger("YCR/Gui")
 
@@ -130,7 +130,7 @@ object Gui {
 
   val scale by savedState("gui/scale") { 1.0 }
 
-  val framerate by savedState("gui/framerate") { mc.window.refreshRate }
+  val framerate by savedState("gui/framerate") { 60 }
 
   val href = localState("href") { EMPTY_PAGE }
 
