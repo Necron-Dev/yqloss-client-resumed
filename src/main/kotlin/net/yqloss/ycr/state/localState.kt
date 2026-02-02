@@ -3,9 +3,15 @@ package net.yqloss.ycr.state
 import kotlin.uuid.Uuid
 import kotlinx.serialization.json.Json
 import net.yqloss.ycr.event.BrowserEvent
-import net.yqloss.ycr.gui.*
+import net.yqloss.ycr.gui.system.GuiLayer
+import net.yqloss.ycr.gui.system.get
+import net.yqloss.ycr.gui.system.postJson
+import net.yqloss.ycr.gui.system.respond
+import net.yqloss.ycr.gui.system.respondJson
+import net.yqloss.ycr.state.system.State
+import net.yqloss.ycr.state.system.States
 
-interface LocalState<T> {
+interface LocalState<T> : State {
   operator fun get(layer: GuiLayer): T
 
   operator fun set(layer: GuiLayer, value: T)
@@ -31,6 +37,8 @@ inline fun <reified T> localState(
   }
 
   return object : LocalState<T> {
+    override val id = id
+
     override fun get(layer: GuiLayer) =
         synchronized(savedValues) { savedValues.getOrPut(layer.uuid, defaultValue) }
 

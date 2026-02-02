@@ -1,13 +1,12 @@
-package net.yqloss.ycr.gui
+package net.yqloss.ycr.gui.system
 
 import me.friwi.jcefmaven.CefAppBuilder
 import net.yqloss.ycr.event.BrowserEvent
 import net.yqloss.ycr.event.GuiRenderEvent
-import net.yqloss.ycr.event.ScheduleEvent
 import net.yqloss.ycr.mc
-import net.yqloss.ycr.state.States
 import net.yqloss.ycr.state.localState
 import net.yqloss.ycr.state.savedState
+import net.yqloss.ycr.state.system.States
 import net.yqloss.ycr.state.webState
 import net.yqloss.ycr.util.getMimeType
 import net.yqloss.ycr.util.uses
@@ -134,6 +133,8 @@ object Gui {
 
   val href = localState("href") { EMPTY_PAGE }
 
+  val token = localState("token") { "" }
+
   private val app =
       with(CefAppBuilder()) {
         cefSettings.windowless_rendering_enabled = true
@@ -163,13 +164,9 @@ object Gui {
     return layer
   }
 
-  private val hudLayer by lazy { createLayer().apply { open("$HOST/index.html#/hud") } }
+  val hudLayer by lazy { createLayer().apply { open("$HOST/index.html#/hud") } }
 
-  private val screenLayer by lazy { createLayer() }
-
-  fun display(screenFactory: (GuiLayer) -> BrowserScreen) {
-    ScheduleEvent { mc.setScreen(screenFactory(screenLayer)) }
-  }
+  val screenLayer by lazy { createLayer() }
 
   fun executeInAllLayers(script: String) {
     for (layer in layers) {

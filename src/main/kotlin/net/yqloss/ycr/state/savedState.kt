@@ -1,12 +1,17 @@
 package net.yqloss.ycr.state
 
-import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
 import kotlinx.serialization.json.Json
 import net.yqloss.ycr.event.BrowserEvent
-import net.yqloss.ycr.gui.*
+import net.yqloss.ycr.gui.system.Gui
+import net.yqloss.ycr.gui.system.get
+import net.yqloss.ycr.gui.system.postJson
+import net.yqloss.ycr.gui.system.respond
+import net.yqloss.ycr.gui.system.respondJson
+import net.yqloss.ycr.state.system.ReadWriteState
+import net.yqloss.ycr.state.system.States
 
-inline fun <reified T> savedState(id: String, defaultValue: () -> T): ReadWriteProperty<Any?, T> {
+inline fun <reified T> savedState(id: String, defaultValue: () -> T): ReadWriteState<T> {
   States.allStates += id
 
   var savedValue = States(id, defaultValue)
@@ -23,7 +28,9 @@ inline fun <reified T> savedState(id: String, defaultValue: () -> T): ReadWriteP
     }
   }
 
-  return object : ReadWriteProperty<Any?, T> {
+  return object : ReadWriteState<T> {
+    override val id = id
+
     override fun getValue(thisRef: Any?, property: KProperty<*>) = savedValue
 
     override fun setValue(thisRef: Any?, property: KProperty<*>, value: T) {

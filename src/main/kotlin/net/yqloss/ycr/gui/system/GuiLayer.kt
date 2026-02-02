@@ -1,4 +1,4 @@
-package net.yqloss.ycr.gui
+package net.yqloss.ycr.gui.system
 
 import com.mojang.blaze3d.opengl.GlStateManager
 import com.mojang.blaze3d.opengl.GlTexture
@@ -38,6 +38,11 @@ class GuiLayer(private val browser: CefBrowserYcr) : AutoCloseable {
   private val coroutineScope = CoroutineScope(Dispatchers.Default + SupervisorJob())
 
   private var dirty = true
+
+  private val randomToken
+    get() = Uuid.random().toString()
+
+  private var token = randomToken
 
   init {
     mc.textureManager.register(
@@ -96,7 +101,7 @@ class GuiLayer(private val browser: CefBrowserYcr) : AutoCloseable {
         )
       }
     }
-    if (!context.readyToRender) return
+    if (!context.readyToRender || token != Gui.token[this]) return
     guiGraphics.pose().pushMatrix()
     val scale = 1.0F / mc.window.guiScale
     guiGraphics.pose().scale(scale, scale)
@@ -113,7 +118,9 @@ class GuiLayer(private val browser: CefBrowserYcr) : AutoCloseable {
   }
 
   fun open(url: String) {
-    Gui.href[this] = url
+    val newToken = randomToken
+    token = newToken
+    Gui.href[this] = "$url?token=$newToken"
   }
 
   fun moveMouse(x: Double, y: Double) {

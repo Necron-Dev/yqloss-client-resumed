@@ -1,4 +1,4 @@
-package net.yqloss.ycr.gui
+package net.yqloss.ycr.gui.system
 
 import java.awt.Component
 import java.awt.Point
@@ -201,7 +201,6 @@ class CefBrowserYcr(client: CefClient, url: String, width: Int, height: Int, fra
   }
 
   override fun executeJavaScript(code: String, url: String, line: Int) {
-    logger.info("executed javascript in browser $uuid: $code")
     super.executeJavaScript(code, url, line)
   }
 }

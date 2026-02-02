@@ -1,13 +1,17 @@
 package net.yqloss.ycr.module
 
-import net.yqloss.ycr.state.savedState
+import net.yqloss.ycr.module.system.Module
+import net.yqloss.ycr.module.system.config.config
+import net.yqloss.ycr.module.system.config.style.bool.switch
 
-object BetterTerminal : Module {
-  override val id = "better_terminal"
-
-  override val name = "Better Terminal"
-
-  override val description = "Better floor-7 terminal GUI and queue-terms."
-
-  override var enabled by savedState("$id/enabled") { false }
+object BetterTerminal :
+    Module("better_terminal", "Better Terminal", "Better floor-7 terminal GUI and queue-terms.") {
+  override val config = config {
+    repeat(100) {
+      ::enabled {
+        name = "Enabled"
+        style = switch
+      }
+    }
+  }
 }

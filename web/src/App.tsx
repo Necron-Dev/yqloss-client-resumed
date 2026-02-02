@@ -1,15 +1,25 @@
-import {Route, Routes} from "react-router-dom";
+import {Route, Routes, useSearchParams} from "react-router-dom";
 import HudPage from "@/pages/hud/HudPage.tsx";
-import ConfigPage from "@/pages/config/ConfigPage.tsx";
+import ConfigScreen from "@/pages/config/ConfigScreen.tsx";
 import {useYcrState} from "@/api.tsx";
 import {useEffect} from "react";
 
 export default function App() {
+  const [params] = useSearchParams()
+
   const [uuid] = useYcrState<string>("uuid")
 
   window.uuid = uuid
 
-  let [href] = useYcrState<string>("href");
+  const [_, setToken] = useYcrState<string>("token")
+
+  useEffect(() => {
+    setTimeout(() => {
+      setToken(params.get("token") ?? "")
+    }, 0)
+  }, [])
+
+  const [href] = useYcrState<string>("href")
 
   useEffect(() => {
     if (href !== undefined && window.location.href !== href) {
@@ -38,7 +48,7 @@ export default function App() {
     <div id={"cef-fix"} className={"absolute top-0 left-0 w-px h-px"}/>
     <Routes>
       <Route element={<HudPage/>} path={"/hud"}/>
-      <Route element={<ConfigPage/>} path={"/screen/config"}/>
+      <Route element={<ConfigScreen/>} path={"/screen/config"}/>
     </Routes>
   </div>
 }

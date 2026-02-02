@@ -1,6 +1,8 @@
-package net.yqloss.ycr.module
+package net.yqloss.ycr.module.system
 
 import kotlinx.serialization.Serializable
+import net.yqloss.ycr.module.BetterTerminal
+import net.yqloss.ycr.module.LeapMenu
 import net.yqloss.ycr.state.readonlyState
 
 object Modules {

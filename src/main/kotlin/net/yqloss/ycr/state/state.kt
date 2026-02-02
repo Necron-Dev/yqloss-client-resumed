@@ -1,12 +1,17 @@
 package net.yqloss.ycr.state
 
-import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
 import kotlinx.serialization.json.Json
 import net.yqloss.ycr.event.BrowserEvent
-import net.yqloss.ycr.gui.*
+import net.yqloss.ycr.gui.system.Gui
+import net.yqloss.ycr.gui.system.get
+import net.yqloss.ycr.gui.system.postJson
+import net.yqloss.ycr.gui.system.respond
+import net.yqloss.ycr.gui.system.respondJson
+import net.yqloss.ycr.state.system.ReadWriteState
+import net.yqloss.ycr.state.system.States
 
-inline fun <reified T> state(id: String, defaultValue: () -> T): ReadWriteProperty<Any?, T> {
+inline fun <reified T> state(id: String, defaultValue: () -> T): ReadWriteState<T> {
   States.allStates += id
 
   var savedValue = defaultValue()
@@ -22,13 +27,15 @@ inline fun <reified T> state(id: String, defaultValue: () -> T): ReadWriteProper
     }
   }
 
-  return object : ReadWriteProperty<Any?, T> {
-    override fun getValue(thisRef: Any?, property: KProperty<*>) = savedValue
+  return object : ReadWriteState<T> {
+    override val id = id
+
+    override fun getValue(thisRef: Any?, property: KProperty<*>): T = savedValue
 
     override fun setValue(thisRef: Any?, property: KProperty<*>, value: T) {
       savedValue = value
       val json = Json.encodeToString(value)
-      Gui.launchedExecuteInAllLayers("window['set_$id'](null,$json)")
+      Gui.launchedExecuteInAllLayers("window['set_$id'](null, $json)")
     }
   }
 }

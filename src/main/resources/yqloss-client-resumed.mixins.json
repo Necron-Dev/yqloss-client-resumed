@@ -11,7 +11,9 @@
     "requireAnnotations": true
   },
   "client": [
+    "MixinGameRenderer",
     "MixinGui",
-    "MixinMinecraft"
+    "MixinMinecraft",
+    "MixinMouseHandler"
   ]
 }

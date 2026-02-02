@@ -1,6 +1,7 @@
-package net.yqloss.ycr.command
+package net.yqloss.ycr.command.system
 
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager
+import net.yqloss.ycr.command.ycr
 import net.yqloss.ycr.event.ClientCommandRegistrationEvent
 
 object Commands {

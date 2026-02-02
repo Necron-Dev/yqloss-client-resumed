@@ -1,4 +1,4 @@
-package net.yqloss.ycr.gui
+package net.yqloss.ycr.gui.system
 
 import kotlinx.serialization.json.Json
 import net.yqloss.ycr.event.BrowserEvent

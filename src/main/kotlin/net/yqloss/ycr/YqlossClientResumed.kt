@@ -3,10 +3,10 @@ package net.yqloss.ycr
 import com.mojang.blaze3d.systems.GpuDevice
 import com.mojang.blaze3d.systems.RenderSystem
 import net.minecraft.client.Minecraft
-import net.yqloss.ycr.command.Commands
-import net.yqloss.ycr.gui.Gui
-import net.yqloss.ycr.module.Modules
-import net.yqloss.ycr.state.States
+import net.yqloss.ycr.command.system.Commands
+import net.yqloss.ycr.gui.system.Gui
+import net.yqloss.ycr.module.system.Modules
+import net.yqloss.ycr.state.system.States
 import net.yqloss.ycr.util.init
 
 val mc: Minecraft by lazy { Minecraft.getInstance() }

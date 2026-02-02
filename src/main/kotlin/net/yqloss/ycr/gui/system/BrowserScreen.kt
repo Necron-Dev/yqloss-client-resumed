@@ -1,4 +1,4 @@
-package net.yqloss.ycr.gui
+package net.yqloss.ycr.gui.system
 
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.screens.Screen
@@ -7,8 +7,8 @@ import net.minecraft.network.chat.Component
 import net.yqloss.ycr.event.GuiRenderEvent
 import net.yqloss.ycr.mc
 
-open class BrowserScreen(private val layer: GuiLayer) :
-    Screen(Component.literal("YCR Browser Screen")) {
+open class BrowserScreen(title: String, private val layer: GuiLayer) :
+    Screen(Component.literal(title)) {
   protected fun execute(script: String) = layer.execute(script)
 
   protected fun open(url: String) = layer.open(url)
@@ -21,9 +21,9 @@ open class BrowserScreen(private val layer: GuiLayer) :
     GuiRenderEvent.fire(GuiRenderEvent(GuiRenderEvent.Layer.BROWSER_SCREEN, guiGraphics))
   }
 
-  override fun onClose() {
+  override fun removed() {
     open(Gui.EMPTY_PAGE)
-    super.onClose()
+    super.removed()
   }
 
   override fun mouseMoved(mouseX: Double, mouseY: Double) {

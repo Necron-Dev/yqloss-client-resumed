@@ -1,4 +1,4 @@
-package net.yqloss.ycr.state
+package net.yqloss.ycr.state.system
 
 import java.io.File
 import kotlinx.serialization.json.Json
