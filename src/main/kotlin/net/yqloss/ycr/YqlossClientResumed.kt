@@ -14,6 +14,8 @@ val mc: Minecraft by lazy { Minecraft.getInstance() }
 val device: GpuDevice
   get() = RenderSystem.getDevice()
 
+val DEBUG = System.getenv("YCRDEBUG") == "true"
+
 fun initialize() {
   YqlossClientResumed.init
 }

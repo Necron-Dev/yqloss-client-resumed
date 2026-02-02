@@ -1,6 +1,10 @@
 package net.yqloss.ycr.gui.system
 
+import java.util.*
+import kotlin.math.min
+import kotlin.uuid.Uuid
 import me.friwi.jcefmaven.CefAppBuilder
+import net.yqloss.ycr.DEBUG
 import net.yqloss.ycr.event.BrowserEvent
 import net.yqloss.ycr.event.GuiRenderEvent
 import net.yqloss.ycr.mc
@@ -21,11 +25,10 @@ import org.cef.network.CefPostDataElement
 import org.cef.network.CefRequest
 import org.cef.network.CefResponse
 import org.slf4j.LoggerFactory
-import java.util.*
-import kotlin.math.min
-import kotlin.uuid.Uuid
 
 private val logger = LoggerFactory.getLogger("YCR/Gui")
+
+private val loggerWeb = LoggerFactory.getLogger("YCR/Web")
 
 private class YcrResourceHandlerAdapter(private val uuid: Uuid) : CefResourceHandlerAdapter() {
   lateinit var event: BrowserEvent
@@ -56,6 +59,10 @@ private class YcrResourceHandlerAdapter(private val uuid: Uuid) : CefResourceHan
     val event =
         BrowserEvent(uuid, request.method, request.url.removePrefix("http://-ycr-"), payload)
     BrowserEvent.fire(event)
+    if (event.mutStatus / 100 != 2) {
+      logger.warn(
+          "${event.mutDone} ${event.mutStatus} ${event.mutMimeType} ${event.method} ${event.url}")
+    }
     this.event = event
     offset = 0
     callback.Continue()
@@ -123,9 +130,9 @@ private object YcrRequestHandler : CefRequestHandlerAdapter() {
 }
 
 object Gui {
-  val HOST = if (System.getenv("YCRDEBUG") == "true") "http://localhost:5173" else "http://-ycr-web"
+  val HOST = if (DEBUG) "http://localhost:5173" else "http://-ycr-web"
 
-  val EMPTY_PAGE = "$HOST/index.html"
+  val EMPTY_PAGE = "$HOST/#/"
 
   val scale by savedState("gui/scale") { 1.0 }
 
@@ -133,17 +140,16 @@ object Gui {
 
   val href = localState("href") { EMPTY_PAGE }
 
-  val token = localState("token") { "" }
+  val token = localState("token") { "Ciallo" }
 
   private val app =
       with(CefAppBuilder()) {
         cefSettings.windowless_rendering_enabled = true
         cefSettings.background_color = cefSettings.ColorType(0, 0, 0, 0)
-        // --use-gl=
-        addJcefArgs("--remote-debugging-port=9222")
-        addJcefArgs("--allow-file-access-from-files")
-        addJcefArgs("--disable-web-security")
         addJcefArgs("--no-sandbox")
+        if (DEBUG) {
+          addJcefArgs("--remote-debugging-port=9222")
+        }
         build()
       }
 
@@ -164,7 +170,7 @@ object Gui {
     return layer
   }
 
-  val hudLayer by lazy { createLayer().apply { open("$HOST/index.html#/hud") } }
+  val hudLayer by lazy { createLayer().apply { open("$HOST/#/hud") } }
 
   val screenLayer by lazy { createLayer() }
 
@@ -197,9 +203,10 @@ object Gui {
       get("web/") {
         uses {
           val filePath =
-              url.removePrefix("web/")
+              url.removePrefix("web")
                   .run { if ('#' in this) substring(0, indexOf('#')) else this }
                   .run { if ('?' in this) substring(0, indexOf('?')) else this }
+                  .run { if (endsWith('/')) "${this}index.html" else this }
 
           when (val stream = javaClass.getResourceAsStream("/web/$filePath")) {
             null -> {
@@ -212,6 +219,21 @@ object Gui {
             }
           }
         }
+      }
+
+      postJson<String>("log/info") {
+        loggerWeb.info(it)
+        respond(200)
+      }
+
+      postJson<String>("log/warn") {
+        loggerWeb.warn(it)
+        respond(200)
+      }
+
+      postJson<String>("log/error") {
+        loggerWeb.error(it)
+        respond(200)
       }
     }
   }

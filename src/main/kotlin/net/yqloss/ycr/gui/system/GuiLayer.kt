@@ -13,6 +13,7 @@ import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.renderer.texture.AbstractTexture
 import net.minecraft.resources.ResourceLocation
 import net.yqloss.ycr.device
+import net.yqloss.ycr.event.FrameEvent
 import net.yqloss.ycr.mc
 import org.lwjgl.opengl.GL11
 import org.lwjgl.opengl.GL12
@@ -37,8 +38,6 @@ class GuiLayer(private val browser: CefBrowserYcr) : AutoCloseable {
 
   private val coroutineScope = CoroutineScope(Dispatchers.Default + SupervisorJob())
 
-  private var dirty = true
-
   private val randomToken
     get() = Uuid.random().toString()
 
@@ -54,14 +53,15 @@ class GuiLayer(private val browser: CefBrowserYcr) : AutoCloseable {
           }
         },
     )
+
+    FrameEvent { commit() }
   }
 
-  fun render(guiGraphics: GuiGraphics) {
+  fun commit() {
     val width = mc.window.width
     val height = mc.window.height
     val context = browser.context
-    if (dirty || width != context.width || height != context.height) {
-      dirty = false
+    if (width != context.width || height != context.height) {
       browser.resize(width, height)
       return
     }
@@ -101,6 +101,13 @@ class GuiLayer(private val browser: CefBrowserYcr) : AutoCloseable {
         )
       }
     }
+  }
+
+  fun render(guiGraphics: GuiGraphics) {
+    val width = mc.window.width
+    val height = mc.window.height
+    val context = browser.context
+    if (width != context.width || height != context.height) return
     if (!context.readyToRender || token != Gui.token[this]) return
     guiGraphics.pose().pushMatrix()
     val scale = 1.0F / mc.window.guiScale
@@ -131,16 +138,16 @@ class GuiLayer(private val browser: CefBrowserYcr) : AutoCloseable {
     browser.pressMouse(button, x.toInt(), y.toInt())
   }
 
+  fun dragMouse(button: Int, x: Double, y: Double) {
+    browser.dragMouse(button, x.toInt(), y.toInt())
+  }
+
   fun releaseMouse(button: Int, x: Double, y: Double) {
     browser.releaseMouse(button, x.toInt(), y.toInt())
   }
 
   fun scrollMouse(delta: Double, x: Double, y: Double) {
     browser.scrollMouse(delta, x.toInt(), y.toInt())
-  }
-
-  fun markDirty() {
-    dirty = true
   }
 
   override fun close() {

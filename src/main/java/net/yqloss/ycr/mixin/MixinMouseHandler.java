@@ -19,4 +19,29 @@ public abstract class MixinMouseHandler {
   private boolean onButtonRedirectMouseReleased(Screen instance, MouseButtonEvent mouseButtonEvent) {
     return ScreenProxy.INSTANCE.mouseReleased(instance, mouseButtonEvent);
   }
+
+  @Redirect(method = "onButton", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screens/Screen;afterMouseAction()V"))
+  private void onButtonRedirectAfterMouseAction(Screen instance) {
+    ScreenProxy.INSTANCE.afterMouseAction(instance);
+  }
+
+  @Redirect(method = "onScroll", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screens/Screen;mouseScrolled(DDDD)Z"))
+  private boolean onScrollRedirectMouseScrolled(Screen instance, double mouseX, double mouseY, double scrollX, double scrollY) {
+    return ScreenProxy.INSTANCE.mouseScrolled(instance, mouseX, mouseY, scrollX, scrollY);
+  }
+
+  @Redirect(method = "handleAccumulatedMovement", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screens/Screen;mouseMoved(DD)V"))
+  private void handleAccumulatedMovementRedirectMouseMoved(Screen instance, double mouseX, double mouseY) {
+    ScreenProxy.INSTANCE.mouseMoved(instance, mouseX, mouseY);
+  }
+
+  @Redirect(method = "handleAccumulatedMovement", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screens/Screen;mouseDragged(Lnet/minecraft/client/input/MouseButtonEvent;DD)Z"))
+  private boolean handleAccumulatedMovementRedirectMouseDragged(Screen instance, MouseButtonEvent mouseButtonEvent, double mouseX, double mouseY) {
+    return ScreenProxy.INSTANCE.mouseDragged(instance, mouseButtonEvent, mouseX, mouseY);
+  }
+
+  @Redirect(method = "handleAccumulatedMovement", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screens/Screen;afterMouseMove()V"))
+  private void handleAccumulatedMovementRedirectAfterMouseMove(Screen instance) {
+    ScreenProxy.INSTANCE.afterMouseMove(instance);
+  }
 }

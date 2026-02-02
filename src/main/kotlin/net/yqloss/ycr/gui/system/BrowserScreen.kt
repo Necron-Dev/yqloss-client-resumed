@@ -13,16 +13,12 @@ open class BrowserScreen(title: String, private val layer: GuiLayer) :
 
   protected fun open(url: String) = layer.open(url)
 
-  override fun added() {
-    layer.markDirty()
-  }
-
   override fun render(guiGraphics: GuiGraphics, mouseX: Int, mouseY: Int, partialTick: Float) {
     GuiRenderEvent.fire(GuiRenderEvent(GuiRenderEvent.Layer.BROWSER_SCREEN, guiGraphics))
   }
 
   override fun removed() {
-    open(Gui.EMPTY_PAGE)
+    layer.open(Gui.EMPTY_PAGE)
     super.removed()
   }
 
@@ -49,6 +45,11 @@ open class BrowserScreen(title: String, private val layer: GuiLayer) :
   ): Boolean {
     layer.scrollMouse(scrollY, mouseX.scaled, mouseY.scaled)
     return super.mouseScrolled(mouseX, mouseY, scrollX, scrollY)
+  }
+
+  override fun mouseDragged(event: MouseButtonEvent, mouseX: Double, mouseY: Double): Boolean {
+    layer.dragMouse(event.button(), mouseX.scaled, mouseY.scaled)
+    return super.mouseDragged(event, mouseX, mouseY)
   }
 
   val Double.scaled

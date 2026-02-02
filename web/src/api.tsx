@@ -37,3 +37,10 @@ export function useYcrState<T>(id: string) {
     })
   }] as const
 }
+
+export function log(message: string, level: "info" | "warn" | "error" = "info") {
+  void fetch(`${HOST}log/${level}`, {
+    method: "POST",
+    body: JSON.stringify(message)
+  })
+}

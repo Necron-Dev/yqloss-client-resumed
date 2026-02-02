@@ -11,13 +11,13 @@ export default function App() {
 
   window.uuid = uuid
 
-  const [_, setToken] = useYcrState<string>("token")
+  const [token, setToken] = useYcrState<string>("token")
 
   useEffect(() => {
     setTimeout(() => {
       setToken(params.get("token") ?? "")
     }, 0)
-  }, [])
+  }, [window.location.href])
 
   const [href] = useYcrState<string>("href")
 
@@ -47,8 +47,9 @@ export default function App() {
   return <div className={"w-screen h-screen absolute overflow-hidden"}>
     <div id={"cef-fix"} className={"absolute top-0 left-0 w-px h-px"}/>
     <Routes>
-      <Route element={<HudPage/>} path={"/hud"}/>
-      <Route element={<ConfigScreen/>} path={"/screen/config"}/>
+      <Route element={<></>} path={"/"}></Route>
+      <Route element={<HudPage key={token}/>} path={"/hud"}/>
+      <Route element={<ConfigScreen key={token}/>} path={"/screen/config"}/>
     </Routes>
   </div>
 }

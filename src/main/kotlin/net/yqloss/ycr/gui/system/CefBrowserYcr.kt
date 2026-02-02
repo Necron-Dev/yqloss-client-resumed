@@ -46,6 +46,15 @@ class CefBrowserYcr(client: CefClient, url: String, width: Int, height: Int, fra
 
   private val component = object : Component() {}
 
+  private fun convertButton(button: Int): Int {
+    return when (button) {
+      1 -> 1
+      2 -> 3
+      3 -> 2
+      else -> 0
+    }
+  }
+
   fun moveMouse(x: Int, y: Int) {
     sendMouseEvent(
         MouseEvent(
@@ -63,16 +72,13 @@ class CefBrowserYcr(client: CefClient, url: String, width: Int, height: Int, fra
   fun pressMouse(button: Int, x: Int, y: Int) {
     sendMouseEvent(
         MouseEvent(
-            component,
-            MouseEvent.MOUSE_PRESSED,
-            0,
-            0,
-            x,
-            y,
-            1,
-            false,
-            1,
-        ))
+            component, MouseEvent.MOUSE_PRESSED, 0, 0, x, y, 1, false, convertButton(button)))
+  }
+
+  fun dragMouse(button: Int, x: Int, y: Int) {
+    sendMouseEvent(
+        MouseEvent(
+            component, MouseEvent.MOUSE_DRAGGED, 0, 0, x, y, 1, false, convertButton(button)))
   }
 
   fun releaseMouse(button: Int, x: Int, y: Int) {
@@ -86,7 +92,7 @@ class CefBrowserYcr(client: CefClient, url: String, width: Int, height: Int, fra
             y,
             1,
             false,
-            1,
+            convertButton(button),
         ))
   }
 
