@@ -3,6 +3,7 @@ import HudPage from "@/pages/hud/HudPage.tsx";
 import ConfigScreen from "@/pages/config/ConfigScreen.tsx";
 import {useYcrState} from "@/api.tsx";
 import {useEffect} from "react";
+import LeapMenuScreen from "@/pages/leap-menu/LeapMenuScreen.tsx";
 
 export default function App() {
   const [params] = useSearchParams()
@@ -50,6 +51,7 @@ export default function App() {
       <Route element={<></>} path={"/"}></Route>
       <Route element={<HudPage key={token}/>} path={"/hud"}/>
       <Route element={<ConfigScreen key={token}/>} path={"/screen/config"}/>
+      <Route element={<LeapMenuScreen key={token}/>} path={"/screen/leap-menu"}/>
     </Routes>
   </div>
 }

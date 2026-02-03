@@ -2,6 +2,7 @@ package net.yqloss.ycr.mixin;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.yqloss.ycr.callback.CallbackMixinMinecraft;
 import net.yqloss.ycr.gui.system.ScreenProxy;
 import org.spongepowered.asm.mixin.Mixin;
@@ -30,5 +31,10 @@ public abstract class MixinMinecraft {
   @Redirect(method = "resizeDisplay", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screens/Screen;resize(Lnet/minecraft/client/Minecraft;II)V"))
   private void resizeDisplayRedirectResize(Screen instance, Minecraft minecraft, int width, int height) {
     ScreenProxy.INSTANCE.resize(instance, minecraft, width, height);
+  }
+
+  @Inject(method = "updateLevelInEngines", at = @At("HEAD"))
+  private void updateLevelInEnginesHead(ClientLevel level, CallbackInfo ci) {
+    CallbackMixinMinecraft.INSTANCE.updateLevelInEnginesHead(level, ci);
   }
 }

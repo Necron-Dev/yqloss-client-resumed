@@ -3,11 +3,7 @@ package net.yqloss.ycr.state
 import kotlin.reflect.KProperty
 import kotlinx.serialization.json.Json
 import net.yqloss.ycr.event.BrowserEvent
-import net.yqloss.ycr.gui.system.Gui
-import net.yqloss.ycr.gui.system.get
-import net.yqloss.ycr.gui.system.postJson
-import net.yqloss.ycr.gui.system.respond
-import net.yqloss.ycr.gui.system.respondJson
+import net.yqloss.ycr.gui.system.*
 import net.yqloss.ycr.state.system.ReadWriteState
 import net.yqloss.ycr.state.system.States
 

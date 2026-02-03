@@ -5,7 +5,7 @@ import net.yqloss.ycr.module.system.config.config
 import net.yqloss.ycr.module.system.config.style.bool.switch
 
 object BetterTerminal :
-    Module("better_terminal", "Better Terminal", "Better floor-7 terminal GUI and queue-terms.") {
+    Module("better-terminal", "Better Terminal", "Better floor-7 terminal GUI and queue-terms.") {
   override val config = config {
     repeat(100) {
       ::enabled {

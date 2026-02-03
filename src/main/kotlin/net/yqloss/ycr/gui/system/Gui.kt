@@ -7,6 +7,7 @@ import me.friwi.jcefmaven.CefAppBuilder
 import net.yqloss.ycr.DEBUG
 import net.yqloss.ycr.event.BrowserEvent
 import net.yqloss.ycr.event.GuiRenderEvent
+import net.yqloss.ycr.event.TickEvent
 import net.yqloss.ycr.mc
 import net.yqloss.ycr.state.localState
 import net.yqloss.ycr.state.savedState
@@ -236,5 +237,7 @@ object Gui {
         respond(200)
       }
     }
+
+    TickEvent { screenLayer }
   }
 }

@@ -16,10 +16,6 @@ object Modules {
   private val modules = listOf(BetterTerminal, LeapMenu)
 
   init {
-    readonlyState("modules/list") {
-      (modules + modules + modules + modules + modules + modules + modules).map {
-        ModuleInfo(it.id, it.name, it.description)
-      }
-    }
+    readonlyState("modules/list") { modules.map { ModuleInfo(it.id, it.name, it.description) } }
   }
 }

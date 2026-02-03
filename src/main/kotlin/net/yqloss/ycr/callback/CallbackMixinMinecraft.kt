@@ -1,9 +1,11 @@
 package net.yqloss.ycr.callback
 
 import net.minecraft.client.gui.screens.Screen
+import net.minecraft.client.multiplayer.ClientLevel
 import net.yqloss.ycr.event.FrameEvent
 import net.yqloss.ycr.event.ScreenProxyEvent
 import net.yqloss.ycr.event.TickEvent
+import net.yqloss.ycr.event.WorldLoadEvent
 import net.yqloss.ycr.gui.system.ScreenProxy
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo
 
@@ -22,5 +24,9 @@ object CallbackMixinMinecraft {
       return
     }
     ScreenProxy.proxy = ScreenProxyEvent(screen).also(ScreenProxyEvent::fire).mutProxy
+  }
+
+  fun updateLevelInEnginesHead(level: ClientLevel?, callbackInfo: CallbackInfo) {
+    WorldLoadEvent.fire(WorldLoadEvent(level))
   }
 }
