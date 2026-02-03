@@ -140,7 +140,7 @@ object Gui {
 
   val href = localState("href") { EMPTY_PAGE }
 
-  val token = localState("token") { "Ciallo" }
+  val token = localState("token") { "" }
 
   private val app =
       with(CefAppBuilder()) {
