@@ -48,9 +48,9 @@ class CefBrowserYcr(client: CefClient, url: String, width: Int, height: Int, fra
 
   private fun convertButton(button: Int): Int {
     return when (button) {
-      1 -> 1
-      2 -> 3
-      3 -> 2
+      0 -> 1
+      1 -> 3
+      2 -> 2
       else -> 0
     }
   }
