@@ -139,6 +139,8 @@ object Gui {
 
   val framerate by savedState("gui/framerate") { 60 }
 
+  val browserArguments by savedState("gui/browser-arguments") { listOf("--no-sandbox") }
+
   val href = localState("href") { EMPTY_PAGE }
 
   val token = localState("token") { "" }
@@ -147,7 +149,7 @@ object Gui {
       with(CefAppBuilder()) {
         cefSettings.windowless_rendering_enabled = true
         cefSettings.background_color = cefSettings.ColorType(0, 0, 0, 0)
-        addJcefArgs("--no-sandbox")
+        browserArguments.forEach(::addJcefArgs)
         if (DEBUG) {
           addJcefArgs("--remote-debugging-port=9222")
         }
