@@ -78,8 +78,7 @@ object LeapMenu : Module("leap-menu", "Leap Menu", "5-grid ring-shaped leap menu
                     .string
                     .filter { it.code in 32..126 }
                     .replace(REGEX_IN_BRACKETS, "")
-                    .trim()
-            ) ?: return@forEach
+                    .trim()) ?: return@forEach
 
         val name = result.groupValues[1]
         val className = result.groupValues[2].lowercase()
