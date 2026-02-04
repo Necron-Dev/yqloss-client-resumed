@@ -209,7 +209,7 @@ object Gui {
                   .run { if ('?' in this) substring(0, indexOf('?')) else this }
                   .run { if (endsWith('/')) "${this}index.html" else this }
 
-          when (val stream = javaClass.getResourceAsStream("/web/$filePath")) {
+          when (val stream = javaClass.getResourceAsStream("/web$filePath")) {
             null -> {
               respond(404)
             }

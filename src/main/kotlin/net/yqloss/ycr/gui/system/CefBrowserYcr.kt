@@ -128,7 +128,7 @@ class CefBrowserYcr(client: CefClient, url: String, width: Int, height: Int, fra
   override fun getScreenInfo(browser: CefBrowser, screenInfo: CefScreenInfo): Boolean {
     val context = context
     screenInfo.Set(
-        0.0,
+        1.0,
         32,
         8,
         false,
