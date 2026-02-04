@@ -50,11 +50,19 @@ object LeapMenu : Module("leap-menu", "Leap Menu", "5-grid ring-shaped leap menu
 
   private val playerDeadMap = mutableMapOf<String, Boolean>()
 
+  private fun getContainer(): ContainerScreen? {
+    if (!enabled || mc.level == null) return null
+    val screen = mc.screen as? ContainerScreen ?: return null
+    return when (screen.title.string) {
+      "Spirit Leap",
+      "Teleport to Player" -> screen
+      else -> null
+    }
+  }
+
   init {
     TickEvent {
-      if (!enabled || mc.level == null) return@TickEvent
-
-      val container = mc.screen as? ContainerScreen ?: return@TickEvent
+      val container = getContainer() ?: return@TickEvent
       val inventory = container.menu
 
       mc.player!!.connection.listedOnlinePlayers.forEach { info ->
@@ -70,7 +78,8 @@ object LeapMenu : Module("leap-menu", "Leap Menu", "5-grid ring-shaped leap menu
                     .string
                     .filter { it.code in 32..126 }
                     .replace(REGEX_IN_BRACKETS, "")
-                    .trim()) ?: return@forEach
+                    .trim()
+            ) ?: return@forEach
 
         val name = result.groupValues[1]
         val className = result.groupValues[2].lowercase()
@@ -139,21 +148,18 @@ object LeapMenu : Module("leap-menu", "Leap Menu", "5-grid ring-shaped leap menu
     }
 
     ScreenProxyEvent {
-      if (!enabled || mc.level == null || screen !is ContainerScreen) return@ScreenProxyEvent
-      when (screen.title.string) {
-        "Spirit Leap",
-        "Teleport to Player" -> {
-          mutProxy = Proxy(screen)
-        }
-      }
+      val container = getContainer() ?: return@ScreenProxyEvent
+      mutProxy = Proxy(container)
     }
 
     BrowserEvent {
       postJson<String>("module/$id/leap-to") { target ->
-        if (!enabled) return@postJson
+        if (getContainer() == null) {
+          respond(404)
+          return@postJson
+        }
         ScheduleEvent {
-          if (!enabled || mc.level == null) return@ScheduleEvent
-          val container = mc.screen as? ContainerScreen ?: return@ScheduleEvent
+          val container = getContainer() ?: return@ScheduleEvent
           val inventory = container.menu
 
           (9..17).forEach { slotId ->
